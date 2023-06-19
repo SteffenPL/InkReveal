@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <name>InkReveal</name>
+  <id>org.inkscape.inkreveal</id>
+
+  <dependency type="file" location="inx">inkreveal.py</dependency>
+  <dependency type="file" location="inx">reveal.js-master.zip</dependency>
+  <dependency type="file" location="inx">slides_template.html</dependency>
+
+  <param name="tab" type="notebook">
+  <page name="Options" gui-text="Options">
+      <param name="dir" type="string" gui-text="Export path (used for copying linked image files to image folder)"></param>
+      <param name="install_revealjs" type="bool" gui-text="Unpack reveal.js into folder (requires an Export path!)">true</param>
+      <param name="template" type="path" gui-text="Custom html template (leave empty for default template)"></param>
+  </page>
+  <page name="Help" gui-text="Help">
+      <label>InkReveal creates a Reveal.js presentation out of a given document.
+      For more information, visit: https://github.com/SteffenPL/InkReveal</label>
+  </page>
+  </param>
+
+  <output>
+    <extension>.html</extension>
+    <mimetype>text/html</mimetype>
+    <filetypename>Reveal.js presentation (*.html)</filetypename>
+    <filetypetooltip>Creates a Reveal.js presentation from the layers of the drawing.</filetypetooltip>
+    <dataloss>true</dataloss>
+  </output>
+
+  <script>
+    <command location="inx" interpreter="python">inkreveal.py</command>
+  </script>
+</inkscape-extension>
