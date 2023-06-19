@@ -8,11 +8,11 @@ To install the extension:
 First, locate the extension folder of Inkscape via **Edit ‣ Preferences ‣ System: User extensions**.
 Then, copy this repository into the extension folder and restart Inkscape.
 
-The extension is installed if the `Save as...` options include the type `.html Reveal.js presentation`
+The extension is installed if the `Save as...` options include the type `Reveal.js presentation (*.html)`
 
 ## Usage
 
-To create a presentation out of your current file, save your document as a `.html Reveal.js presentation`.
+To create a presentation out of your current file, save your document as a `Reveal.js presentation (*.html)`.
 
 This will create a `.html` file that contains a [reveal.js](https://revealjs.com/) presentation created from the layers of your document.
 
