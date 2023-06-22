@@ -8,8 +8,8 @@
   <dependency type="file" location="inx">slides_template.html</dependency>
 
   <param name="tab" type="notebook">
+  <label>InkReveal assumes that the document is saved in the same folder as the current .svg file!</label>
   <page name="Options" gui-text="Options">
-      <param name="dir" type="string" gui-text="Export path (used for copying linked image files to image folder)"></param>
       <param name="install_revealjs" type="bool" gui-text="Unpack reveal.js into folder (requires an Export path!)">true</param>
       <param name="template" type="path" gui-text="Custom html template (leave empty for default template)"></param>
   </page>

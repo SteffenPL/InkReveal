@@ -4,6 +4,7 @@ import shutil
 import re
 
 from copy import deepcopy
+import urllib
 
 from lxml import etree
 
@@ -15,7 +16,6 @@ import inkex
 class RevealExporter(inkex.OutputExtension):
     def add_arguments(self, parser):
         parser.add_argument("--tab")
-        parser.add_argument("--dir")
         parser.add_argument("--template")
         parser.add_argument("--install_revealjs")
 
@@ -29,10 +29,6 @@ class RevealExporter(inkex.OutputExtension):
         svg.attrib["height"] = ""
         
 
-        base_path = self.options.dir
-
-        if not os.path.isdir(base_path):
-            raise inkex.AbortExtension("The entered path '%s' is not a directory." % base_path)
 
         xlink = "{http://www.w3.org/1999/xlink}"
         inkscape = "{http://www.inkscape.org/namespaces/inkscape}"
@@ -43,15 +39,18 @@ class RevealExporter(inkex.OutputExtension):
         for pth in svg.xpath(".//svg:path", namespaces=inkex.NSS):
             pth.attrib["style"] = pth.attrib.get("style", "").replace("context-stroke;", "black;")
 
-        if not base_path in (None, ""):
-            os.makedirs(os.path.join(base_path, reveal_js_path, "images"), exist_ok=True)
+        if not self.base_path in (None, ""):
+            os.makedirs(os.path.join(self.base_path, reveal_js_path, "images"), exist_ok=True)
+
             for img in svg.xpath(".//svg:image", namespaces=inkex.NSS):
-                href = img.attrib.get("%shref" % xlink, "")
+                href = urllib.parse.unquote(img.attrib.get("%shref" % xlink, ""))
                 href = href.replace("file://", "")
+                href = self.absolute_href(href)
+
                 fn = os.path.basename(href)
-                new_fn = os.path.join(base_path, reveal_js_path, "images", fn)
+                new_fn = os.path.join(self.base_path, reveal_js_path, "images", fn)
                 if os.path.abspath(href) != os.path.abspath(new_fn):
-                    shutil.copytree(href, new_fn, symlinks=True, dirs_exist_ok=True)
+                    shutil.copy(href, new_fn)
                 
                 img.attrib["src"] = os.path.join(reveal_js_path, "images", fn)
                 
@@ -90,10 +89,12 @@ class RevealExporter(inkex.OutputExtension):
     def save(self, stream):
         html_parser = etree.HTMLParser()
 
+        self.base_path = self.svg_path()
+
         # unzip reveal js: 
         if self.options.install_revealjs:
             with zipfile.ZipFile(self.get_resource("reveal.js-master.zip")) as zip:
-                zip.extractall(self.options.dir)
+                zip.extractall(self.base_path)
 
         if self.options.template and len(self.options.template) > 0:
             with open(self.options.template) as st:

@@ -7,7 +7,7 @@
    viewBox="0 0 507.99998 285.75"
    version="1.1"
    id="svg5"
-   inkscape:version="1.2.2 (1:1.2.2+202305151914+b0a8486541)"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
    sodipodi:docname="example.svg"
    xml:space="preserve"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -27,12 +27,12 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="0.93806818"
-     inkscape:cx="935.96608"
-     inkscape:cy="552.19867"
-     inkscape:window-width="2560"
-     inkscape:window-height="1372"
-     inkscape:window-x="2560"
-     inkscape:window-y="0"
+     inkscape:cx="936.49909"
+     inkscape:cy="552.73168"
+     inkscape:window-width="1920"
+     inkscape:window-height="1111"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer2" /><defs
      id="defs2"><marker
@@ -55,7 +55,7 @@
      inkscape:label="Title"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:none"><text
+     style="display:inline"><text
        xml:space="preserve"
        style="font-size:11.2889px;line-height:1.25;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;font-variant-ligatures:none;stroke-width:0.264583"
        x="220.19989"
@@ -107,7 +107,8 @@
            y="225.91365">appearing text</tspan></text></g></g><g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Second slide"><text
+     inkscape:label="Second slide"
+     style="display:none"><text
        xml:space="preserve"
        style="font-size:11.2889px;line-height:1.25;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;font-variant-ligatures:none;stroke-width:0.264583"
        x="180.1557"
