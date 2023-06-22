@@ -30,6 +30,10 @@ class RevealExporter(inkex.OutputExtension):
         
 
         base_path = self.options.dir
+
+        if not os.path.isdir(base_path):
+            raise inkex.AbortExtension("The entered path '%s' is not a directory." % base_path)
+
         xlink = "{http://www.w3.org/1999/xlink}"
         inkscape = "{http://www.inkscape.org/namespaces/inkscape}"
 
@@ -47,7 +51,7 @@ class RevealExporter(inkex.OutputExtension):
                 fn = os.path.basename(href)
                 new_fn = os.path.join(base_path, reveal_js_path, "images", fn)
                 if os.path.abspath(href) != os.path.abspath(new_fn):
-                    shutil.copyfile(href, new_fn)
+                    shutil.copytree(href, new_fn, symlinks=True, dirs_exist_ok=True)
                 
                 img.attrib["src"] = os.path.join(reveal_js_path, "images", fn)
                 
