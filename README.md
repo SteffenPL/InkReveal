@@ -7,6 +7,7 @@ I recommend using the latest version of Inkscape: https://inkscape.org/release/i
 To install the extension:
 First, locate the extension folder of Inkscape via **Edit ‣ Preferences ‣ System: User extensions**.
 Then, copy this repository into the extension folder and restart Inkscape.
+(One linux, this might be done via `cd ~/.config/inkscape/extensions` and `git clone https://github.com/SteffenPL`.)
 
 The extension is installed if the `Save as...` options include the type `Reveal.js presentation (*.html)`
 
