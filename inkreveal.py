@@ -64,6 +64,70 @@ class RevealExporter(inkex.OutputExtension):
             else:
                 layer.attrib["class"] = "fragment"
 
+        for rect in svg.xpath(".//svg:rect", namespaces=inkex.NSS):
+            
+            # if the rect element has a desc as a child, replace the rect element 
+            # with a foreignObject element which constrains the text of the desc as the innerHtml
+            # of the foreignObject element
+            if len(rect.xpath("./svg:desc", namespaces=inkex.NSS)) > 0:
+                # get the desc element
+                desc = rect.xpath("./svg:desc", namespaces=inkex.NSS)[0]
+
+                # create a new foreignObject element
+                foreignObject = etree.Element("foreignObject")
+
+
+                # set the x, y, width and height attributes of the foreignObject element
+                foreignObject.attrib["x"] = rect.attrib["x"]
+                foreignObject.attrib["y"] = rect.attrib["y"]
+                foreignObject.attrib["width"] = rect.attrib["width"]
+                foreignObject.attrib["height"] = rect.attrib["height"]
+
+                innerHTML = desc.text
+                variables = {'w': float(rect.attrib["width"]), 'h': float(rect.attrib["height"])}
+
+                # find all regular expressions of the from X = "Y" where X is a variable name and Y is a value
+                # store all variables in a dictionary. Allow spaces before or after the = sign.
+                variables.update(dict(re.findall(r'(\w+)\s*=\s*"([^"]+)"', innerHTML)))
+
+                variables["zoom"] = float(variables.get("zoom", variables["w"] / 1024.0))
+
+                foreignObject.attrib["width"] = str(variables["w"] / variables["zoom"])
+                foreignObject.attrib["height"] = str(variables["h"] / variables["zoom"])
+                foreignObject.attrib["style"] = f"""transform: scale({variables["zoom"]}); transform-origin: top left;"""
+                foreignObject.attrib["x"] = str(float(rect.attrib["x"]) / variables["zoom"])
+                foreignObject.attrib["y"] = str(float(rect.attrib["y"]) / variables["zoom"])
+
+
+                if "{{video" in innerHTML:
+                    innerHTML = f"""
+                    <video width="{variables['w'] / variables['zoom']}" height="{variables['h'] / variables['zoom']}" data-autoplay="true">
+                        <source src="{variables['src']}" type="video/mp4"></source>
+                        Your browser does not support the video tag.
+                    </video>
+                    """
+
+                elif "{{iframe" in innerHTML:
+                    innerHTML = f"""
+                    <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" data-src="{variables['src']}" data-preload="true">
+                    </iframe>
+                    """
+                else:
+                    innerHTML = innerHTML.format(**variables)
+                
+                # parse innerHTML as html and append it to the foreignObject element
+                foreignObject.append(etree.fromstring("<body xmlns='http://www.w3.org/1999/xhtml'>" + 
+                                                    innerHTML +
+                                                    "</body>"))
+                    
+ 
+                # replace the rect element with the foreignObject element
+                rect.getparent().replace(rect, foreignObject)
+
+                # remove the desc element
+                rect.remove(desc)
+
+
         top_level_layers = svg.xpath("./svg:g", namespaces=inkex.NSS)
 
         for top_level_layer in top_level_layers:
