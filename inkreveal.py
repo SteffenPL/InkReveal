@@ -10,6 +10,7 @@ from lxml import etree
 
 
 reveal_js_path = "reveal.js-master"
+images_path = "images"
 
 import inkex 
 
@@ -40,7 +41,7 @@ class RevealExporter(inkex.OutputExtension):
             pth.attrib["style"] = pth.attrib.get("style", "").replace("context-stroke;", "black;")
 
         if not self.base_path in (None, ""):
-            os.makedirs(os.path.join(self.base_path, reveal_js_path, "images"), exist_ok=True)
+            os.makedirs(os.path.join(self.base_path, images_path), exist_ok=True)
 
             for img in svg.xpath(".//svg:image", namespaces=inkex.NSS):
                 href = urllib.parse.unquote(img.attrib.get("%shref" % xlink, ""))
@@ -48,12 +49,12 @@ class RevealExporter(inkex.OutputExtension):
                 href = self.absolute_href(href)
 
                 fn = os.path.basename(href)
-                new_fn = os.path.join(self.base_path, reveal_js_path, "images", fn)
+                new_fn = os.path.join(self.base_path, images_path, fn)
                 if os.path.abspath(href) != os.path.abspath(new_fn):
                     shutil.copy(href, new_fn)
                 
-                img.attrib["src"] = os.path.join(reveal_js_path, "images", fn)
-                
+                img.attrib["src"] = os.path.join(images_path, fn)
+
 
         for layer in svg.xpath("./svg:g/svg:g", namespaces=inkex.NSS):
             name = layer.attrib.get("%slabel" % inkscape, "")
