@@ -86,12 +86,13 @@ class RevealExporter(inkex.OutputExtension):
 
                 innerHTML = desc.text
                 variables = {'w': float(rect.attrib["width"]), 'h': float(rect.attrib["height"])}
+                variables["content_width"] = "1024"
 
                 # find all regular expressions of the from X = "Y" where X is a variable name and Y is a value
                 # store all variables in a dictionary. Allow spaces before or after the = sign.
                 variables.update(dict(re.findall(r'(\w+)\s*=\s*"([^"]+)"', innerHTML)))
 
-                variables["zoom"] = float(variables.get("zoom", variables["w"] / 1024.0))
+                variables["zoom"] = float(variables.get("zoom", variables["w"] / float(variables["content_width"])))
 
                 foreignObject.attrib["width"] = str(variables["w"] / variables["zoom"])
                 foreignObject.attrib["height"] = str(variables["h"] / variables["zoom"])
