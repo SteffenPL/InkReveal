@@ -103,7 +103,7 @@ class RevealExporter(inkex.OutputExtension):
 
                 if "{{video" in innerHTML:
                     innerHTML = f"""
-                    <video width="{variables['w'] / variables['zoom']}" height="{variables['h'] / variables['zoom']}" data-autoplay="true">
+                    <video width="{variables['w'] / variables['zoom']}" height="{variables['h'] / variables['zoom']}" data-autoplay="true" autoplay="true" loop="true" data-loop="true">
                         <source src="{variables['src']}" type="video/mp4"></source>
                         Your browser does not support the video tag.
                     </video>
@@ -112,6 +112,14 @@ class RevealExporter(inkex.OutputExtension):
                 elif "{{iframe" in innerHTML:
                     innerHTML = f"""
                     <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" data-src="{variables['src']}" data-preload="true">
+                    </iframe>
+                    """
+                elif "{{youtube" in innerHTML:
+                    innerHTML = f"""
+                    <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" 
+                    src="https://www.youtube.com/embed/{variables['src']}" 
+                    title="YouTube video player" frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="true" data-preload="true">
                     </iframe>
                     """
                 else:
