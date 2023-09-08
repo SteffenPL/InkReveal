@@ -24,6 +24,7 @@ The rules for generating a slide are relatively simple:
 > the document represents an element that will appear one after the other. See the folder `examples` for an example presentation.
 
 Take the following as an example:
+
 ![](layers.png)
 
 This will generate a presentation with two slides (first Title and then Second slide). The title slide has one element which is always visible and three element which appear.
@@ -38,12 +39,55 @@ For a list of available options, see: https://revealjs.com/fragments/
 
 ### Images
 
-When embedding images, use the option `link` instead of `embed`. 
+When embedding images, use the option `link` instead of `embed`.
+
 ![](import_images.png)
+
+**Important: The link option in the SVG format is a bit broken since one cannot move .svg files with links to other computers since links store absolute paths.
+I am working on resolving this, but since it is an SVG problem, rather than InkReveal, it might be difficult.** 
 
 The images will be copied into the folder `reveal.js-master/images` so that the presentation can be viewed on other devices as well.
 
 The option `embed` would also work, but results in a much larger file size.
+
+## Embedding videos, YouTube links or webpages
+
+One can create a rectangle with dynamic HTML content by setting `Object properties` to specific strings. 
+
+For example, to embed a YouTube video, create a rectangle, right-click `Object properties` as shown below: 
+
+![](obj.png)
+
+Then enter 
+```
+{{youtube
+src="LMBeC_Ht2Lk?si=bXWGjeX8F4iBXpGl&amp;start=10"
+}}
+```
+where `src` is the ending part of the URL obtained from the share embedd button on YouTube, e.g. the ending part of `https://www.youtube.com/embed/<src>`.
+Finally, click the `Set` button (otherwise the change is not saved).
+
+![](set.png)
+
+For video links, use this template
+```
+{{video
+src="assets/video.mp4"
+}}
+```
+where `src` can either be an URL or a relative part.
+
+For arbitrary iframes, use 
+```
+{{iframe
+src="https://github.com/"
+content_width="1024"
+}}
+```
+where `src` can either be a URL or a relative path. `content_width` is used to determine the zoom of the iframe.
+
+Local videos or other assets can be referred to as arbitrary paths and will automatically be copied into the `assets` folder.
+
 
 ### $\LaTeX$ 
 

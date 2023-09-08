@@ -45,6 +45,10 @@ class RevealExporter(inkex.OutputExtension):
 
             for img in svg.xpath(".//svg:image", namespaces=inkex.NSS):
                 href = urllib.parse.unquote(img.attrib.get("%shref" % xlink, ""))
+
+                if href.startswith("data:"):
+                    continue
+
                 href = href.replace("file://", "")
                 href = self.absolute_href(href)
 
@@ -54,6 +58,7 @@ class RevealExporter(inkex.OutputExtension):
                     shutil.copy(href, new_fn)
                 
                 img.attrib["src"] = os.path.join(images_path, fn)
+                img.attrib["%shref" % xlink] = os.path.join(images_path, fn)
 
 
         for layer in svg.xpath("./svg:g/svg:g", namespaces=inkex.NSS):
@@ -111,7 +116,7 @@ class RevealExporter(inkex.OutputExtension):
 
                 elif "{{iframe" in innerHTML:
                     innerHTML = f"""
-                    <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" data-src="{variables['src']}" data-preload="true">
+                    <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" src="{variables['src']}" >
                     </iframe>
                     """
                 elif "{{youtube" in innerHTML:
@@ -146,7 +151,15 @@ class RevealExporter(inkex.OutputExtension):
 
             top_level_layer.attrib["display"] = "inline"
 
-            slide = etree.Element("section")
+            if len(top_level_layer.xpath("./svg:desc", namespaces=inkex.NSS)) > 0:
+                # get the desc element
+                desc = top_level_layer.xpath("./svg:desc", namespaces=inkex.NSS)[0]
+
+                # create a new foreignObject element
+                slide = etree.fromstring("<section " + desc.text + "></section>")
+            else:
+                slide = etree.Element("section")
+    
             new_svg = deepcopy(svg)
 
             for element in new_svg.xpath("./svg:g", namespaces=inkex.NSS):
