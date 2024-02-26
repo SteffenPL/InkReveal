@@ -116,7 +116,7 @@ class RevealExporter(inkex.OutputExtension):
 
                 elif "{{iframe" in innerHTML:
                     innerHTML = f"""
-                    <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" src="{variables['src']}" >
+                    <iframe width="{variables['w'] / variables["zoom"] }" height="{variables['h'] / variables["zoom"] }" src="{variables['src']}" scrolling="no">
                     </iframe>
                     """
                 elif "{{youtube" in innerHTML:
