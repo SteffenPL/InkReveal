@@ -54,7 +54,7 @@ class RevealExporter(inkex.OutputExtension):
 
                 fn = os.path.basename(href)
                 new_fn = os.path.join(self.base_path, images_path, fn)
-                if os.path.abspath(href) != os.path.abspath(new_fn):
+                if not os.path.samefile(href, new_fn):
                     shutil.copy(href, new_fn)
                 
                 img.attrib["src"] = os.path.join(images_path, fn)
